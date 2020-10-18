@@ -58,5 +58,5 @@ class New(object):
 
     def exec_poetry(self):
         os.chdir('./{}'.format(self._name))
-        FileUtility().execute_command("poetry", ["init"])
+        FileUtility().execute_command("poetry", ["install"])
         os.chdir('../')
