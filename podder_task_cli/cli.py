@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import click
 
 from podder_task_cli.commands import Inspect, New
@@ -11,7 +13,7 @@ def main():
 @main.command()
 @click.argument('name')
 def new(name: str):
-    New(name).process()
+    New(name=name, path=Path("./")).process()
 
 
 @main.command()
