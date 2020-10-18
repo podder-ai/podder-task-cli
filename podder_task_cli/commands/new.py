@@ -1,3 +1,4 @@
+import os
 import shutil
 import sys
 import tempfile
@@ -55,6 +56,7 @@ class New(object):
         Process(name=self._name,
                 base_directory=self._path.joinpath(self._name)).process()
 
-    @staticmethod
-    def exec_poetry():
+    def exec_poetry(self):
+        os.chdir('./{}'.format(self._name))
         FileUtility().execute_command("poetry", ["init"])
+        os.chdir('../')
