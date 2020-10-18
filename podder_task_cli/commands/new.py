@@ -25,6 +25,7 @@ class New(object):
         self.prepare_directory()
         self.create_process()
         self.exec_poetry()
+        click.echo("")
         click.secho("Project and process has been prepared for you !",
                     fg="green")
         click.echo("")
@@ -33,6 +34,7 @@ class New(object):
             .format(self._name, self._name),
             fg="green")
         click.secho("🚃🚃🚃🚃🚃 Happy Hacking ! 🚃🚃🚃🚃🚃", fg="green")
+        click.echo("")
 
     def check_environment(self) -> bool:
         python_version = sys.version_info
@@ -51,7 +53,8 @@ class New(object):
         path = self._path.joinpath(self._name)
         if path.exists():
             click.secho(
-                "directory/file named {} exists already. You need to delete it first if you want to create new one.",
+                "directory/file named {} exists already. You need to delete it first if you want to create new one."
+                .format(self._name),
                 fg="red")
             return False
 
