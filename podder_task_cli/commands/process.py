@@ -22,6 +22,9 @@ class Process(object):
         return self._base_directory.joinpath("processes", self._name)
 
     def prepare_directory(self):
+        click.secho("Creating directory for your process named {}...".format(
+            self._name),
+                    fg="green")
         for directory in self._directories:
             original_path = self._base_directory.joinpath(directory).joinpath(
                 "task_name")
@@ -33,6 +36,7 @@ class Process(object):
                 renamed_path.mkdir(parents=True)
 
     def copy_files(self):
+        click.secho("Copying template files for your process...", fg="green")
         target_directory = self._get_process_path()
         for file in self._copy_files:
             template = self._template_directory.joinpath(file)

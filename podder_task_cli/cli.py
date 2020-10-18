@@ -2,7 +2,7 @@ from pathlib import Path
 
 import click
 
-from podder_task_cli.commands import New, Process
+from podder_task_cli.commands import Inspect, New, Process
 
 from . import __version__
 
@@ -27,4 +27,4 @@ def process(name: str):
 
 @main.command()
 def inspect():
-    pass
+    Inspect(path=Path("./")).process()

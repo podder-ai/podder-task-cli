@@ -25,9 +25,16 @@ class New(object):
         self.prepare_directory()
         self.create_process()
         self.exec_poetry()
+        click.secho("Project and process has been prepared for you !",
+                    fg="green")
+        click.echo("")
+        click.secho(
+            "Open {}/processes/{}/process.py and start writing your awesome code."
+            .format(self._name, self._name),
+            fg="green")
+        click.secho("🚃🚃🚃🚃🚃 Happy Hacking ! 🚃🚃🚃🚃🚃", fg="green")
 
-    @staticmethod
-    def check_environment() -> bool:
+    def check_environment(self) -> bool:
         python_version = sys.version_info
         if python_version.major < 3 or (python_version.major == 3
                                         and python_version.minor < 6):
@@ -41,9 +48,19 @@ class New(object):
                 fg="red")
             return False
 
+        path = self._path.joinpath(self._name)
+        if path.exists():
+            click.secho(
+                "directory/file named {} exists already. You need to delete it first if you want to create new one.",
+                fg="red")
+            return False
+
         return True
 
     def prepare_directory(self):
+        click.secho("Creating project directory named {}...".format(
+            self._name),
+                    fg="green")
         with tempfile.TemporaryDirectory() as temp_path:
             write_path = Path(temp_path).joinpath('podder-task-base.zip')
             urllib.request.urlretrieve(self._podder_task, str(write_path))
@@ -57,6 +74,8 @@ class New(object):
                 base_directory=self._path.joinpath(self._name)).process()
 
     def exec_poetry(self):
+        click.secho("Executing poetry install to install required packages...",
+                    fg="green")
         os.chdir('./{}'.format(self._name))
         FileUtility().execute_command("poetry", ["install"])
         os.chdir('../')
