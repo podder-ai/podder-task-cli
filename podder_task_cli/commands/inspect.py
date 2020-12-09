@@ -1,6 +1,10 @@
 from pathlib import Path
 
 import click
+from rich.console import Console
+
+from .._compat import importlib_metadata
+from ..utilities import PoetryLockUtility
 
 
 class Inspect(object):
@@ -8,20 +12,36 @@ class Inspect(object):
         self._path = path
 
     def process(self):
-        processes = self.get_all_process()
-        click.secho("Currently this project has {} process(es).".format(
-            len(processes)),
-                    fg="green")
-        for process in processes:
-            click.secho("  * {}".format(process), fg="green")
+        info = self._get_info()
+        console = Console()
+        console.print("\n------------------------------------", style="green")
+        console.print("Podder Task Foundation", style="green")
+        version = info["podder_task_foundation"]["version"] or "Not Found"
+        console.print("Version:", version)
+        console.print("\nProcesses", style="green")
+        for process in info["processes"]:
+            console.print(process)
+        console.print("------------------------------------\n", style="green")
 
-    def get_all_process(self) -> [str]:
+    def _get_info(self):
+        return {
+            "processes": self._get_all_process(),
+            "podder_task_foundation": self._get_podder_task_foundation_info()
+        }
+
+    def _get_all_process(self) -> [str]:
         results = []
         process_path = self._path.joinpath("processes")
         if not process_path.is_dir():
             return []
         for process in process_path.iterdir():
-            if not process.is_dir() or process.name[0] == ".":
+            if not process.is_dir(
+            ) or process.name[0] == "." or process.name[0] == "_":
                 continue
             results.append(process.name)
         return results
+
+    def _get_podder_task_foundation_info(self) -> dict:
+        utility = PoetryLockUtility(self._path)
+        version = utility.get_podder_task_foundation_version()
+        return {"version": version}

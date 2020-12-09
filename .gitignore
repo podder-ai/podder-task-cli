@@ -32,3 +32,4 @@ README.rst
 # OS Dependent files
 .DS_Store
 .pypirc
+*.json
