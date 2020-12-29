@@ -1,4 +1,5 @@
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -7,8 +8,9 @@ import zipfile
 from pathlib import Path
 
 import click
+from PyInquirer import prompt
 
-from ..utilities import FileUtility
+from ..utilities import FileUtility, GitUtility, ProcessUtility
 from .process import Process
 
 
@@ -22,7 +24,13 @@ class New(object):
     def process(self):
         if not self.check_environment():
             return
+
+        data = {
+            "name": self._name,
+            "author": self.ask_about_author(),
+        }
         self.prepare_directory()
+        self.update_files(data)
         self.create_process()
         self.exec_poetry()
         click.echo("")
@@ -72,6 +80,10 @@ class New(object):
             shutil.move(str(Path(temp_path).joinpath("podder-task-base-main")),
                         str(self._path.joinpath(self._name)))
 
+    def update_files(self, data: dict):
+        pyproject = self._path.joinpath(self._name, "pyproject.toml")
+        FileUtility().update_target_file(pyproject, data)
+
     def create_process(self):
         Process(name=self._name,
                 base_directory=self._path.joinpath(self._name)).process()
@@ -82,3 +94,31 @@ class New(object):
         os.chdir('./{}'.format(self._name))
         FileUtility().execute_command("poetry", ["install"])
         os.chdir('../')
+
+    @staticmethod
+    def ask_about_author() -> dict:
+        answers = prompt([
+            {
+                'type': 'input',
+                'name': "name",
+                'message': "Please input author name",
+                'default': GitUtility().get_config("user.name", default=""),
+            },
+            {
+                'type':
+                'input',
+                'name':
+                "email",
+                'message':
+                "Please input author email",
+                'validate':
+                lambda email: bool(
+                    re.search(r"^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$", email)),
+                'default':
+                GitUtility().get_config("user.email", default=""),
+            },
+        ])
+        if "name" not in answers or "email" not in answers:
+            raise KeyboardInterrupt
+
+        return answers

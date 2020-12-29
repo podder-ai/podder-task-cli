@@ -1,10 +1,8 @@
 import shutil
 import subprocess
-import tempfile
-import urllib
-import urllib.request
-import zipfile
 from pathlib import Path
+
+from jinja2 import Template
 
 
 class FileUtility(object):
@@ -21,3 +19,10 @@ class FileUtility(object):
         output = subprocess.getoutput("{} {}".format(name,
                                                      " ".join(arguments)))
         return output
+
+    @staticmethod
+    def update_target_file(path: Path, data: dict):
+        content = path.read_text()
+        template = Template(content)
+        data = template.render(data)
+        path.write_text(data)
