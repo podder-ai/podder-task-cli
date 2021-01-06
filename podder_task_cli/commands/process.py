@@ -16,7 +16,7 @@ class Process(object):
         self._name = name
         self._base_directory = base_directory
         self._template_directory = Path(__file__).parent.joinpath(
-            "..", "..", "templates")
+            "..", "templates")
 
     def process(self):
         data = {
@@ -48,7 +48,7 @@ class Process(object):
         click.secho("Copying template files for your process...", fg="green")
         target_directory = self._get_process_path()
         for file in self._copy_files:
-            template = self._template_directory.joinpath(file)
+            template = self._template_directory.joinpath(file + ".tmpl")
             target = target_directory.joinpath(file)
             shutil.copy(str(template), str(target))
 
