@@ -2,7 +2,7 @@ from pathlib import Path
 
 import click
 
-from podder_task_cli.commands import Eject, Inspect, New, Process
+from podder_task_cli.commands import Eject, Import, Inspect, New, Process
 
 from . import __version__
 
@@ -33,3 +33,12 @@ def inspect():
 @main.command()
 def eject():
     Eject(path=Path("./")).process()
+
+
+@main.command(name='import')
+@click.option('-p', '--process', 'process_name', multiple=True)
+@click.argument('target_repository')
+def _import(process_name: str, target_repository: str):
+    Import(target_repository=target_repository,
+           processes=process_name,
+           base_directory=Path("./")).process()

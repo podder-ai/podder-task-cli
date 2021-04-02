@@ -33,3 +33,5 @@ README.rst
 .DS_Store
 .pypirc
 *.json
+
+setup.py
