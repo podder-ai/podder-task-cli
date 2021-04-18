@@ -71,7 +71,7 @@ class New(object):
     def prepare_directory(self):
         click.secho("Creating project directory named {}...".format(
             self._name),
-                    fg="green")
+            fg="green")
         with tempfile.TemporaryDirectory() as temp_path:
             write_path = Path(temp_path).joinpath('podder-task-base.zip')
             urllib.request.urlretrieve(self._podder_task, str(write_path))
@@ -113,7 +113,7 @@ class New(object):
                 "Please input author email",
                 'validate':
                 lambda email: bool(
-                    re.search(r"^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$", email)),
+                    re.search(r"^[\w\.\+\-]+\@[\w]+\.[a-zA-Z]{2,}$", email)),
                 'default':
                 GitUtility().get_config("user.email", default=""),
             },
