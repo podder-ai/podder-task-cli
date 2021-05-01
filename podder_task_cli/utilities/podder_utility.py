@@ -1,2 +1,0 @@
-class ProcessUtility(object):
-    pass

@@ -8,7 +8,8 @@ import click
 from PyInquirer import prompt
 
 from ..entities import Entity
-from ..utilities import FileUtility, GitUtility, ProcessUtility
+from ..services import ProcessService
+from ..utilities import GitUtility
 
 
 class Import(object):
@@ -34,7 +35,8 @@ class Import(object):
                 self._target_repository),
                         fg="red")
             return False
-        processes = self._get_process_list(destination_path)
+        process_service = ProcessService(destination_path)
+        processes = process_service.get_process_list()
         if self._processes is None or len(self._processes) == 0:
             self._processes = self._select_processes(processes)
         else:
@@ -48,21 +50,6 @@ class Import(object):
 
         for process in self._processes:
             self._import_process(process, destination_path)
-
-    @staticmethod
-    def _get_process_list(repository_path: Path) -> [str]:
-        process_directory = repository_path.joinpath("processes")
-        if not process_directory.exists() or not process_directory.is_dir():
-            return []
-        processes = []
-        for path in process_directory.iterdir():
-            if not path.is_dir():
-                continue
-            if path.name.startswith("."):
-                continue
-            processes.append(path.name)
-
-        return processes
 
     @staticmethod
     def _select_processes(processes: [str]) -> [str]:

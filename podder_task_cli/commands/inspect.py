@@ -1,15 +1,14 @@
 from pathlib import Path
 
-import click
 from rich.console import Console
 
-from .._compat import importlib_metadata
-from ..utilities import PoetryLockUtility
+from ..services import PackageService
 
 
 class Inspect(object):
     def __init__(self, path: Path):
         self._path = path
+        self._package_service = PackageService(self._path)
 
     def process(self):
         info = self._get_info()
@@ -42,6 +41,5 @@ class Inspect(object):
         return results
 
     def _get_podder_task_foundation_info(self) -> dict:
-        utility = PoetryLockUtility(self._path)
-        version = utility.get_podder_task_foundation_version()
+        version = self._package_service.get_podder_task_foundation_version()
         return {"version": version}

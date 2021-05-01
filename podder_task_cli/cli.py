@@ -2,7 +2,8 @@ from pathlib import Path
 
 import click
 
-from podder_task_cli.commands import Eject, Import, Inspect, New, Process
+from podder_task_cli.commands import (Analyze, Eject, Import, Inspect, New,
+                                      Process)
 
 from . import __version__
 
@@ -33,6 +34,12 @@ def inspect():
 @main.command()
 def eject():
     Eject(path=Path("./")).process()
+
+
+@main.command()
+@click.option('-j', '--json_output', 'json_output', is_flag=True)
+def analyze(json_output):
+    Analyze(path=Path("./")).process(json_output=json_output)
 
 
 @main.command(name='import')
