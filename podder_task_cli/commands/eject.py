@@ -1,3 +1,4 @@
+import os
 import shutil
 import tempfile
 import urllib.request
@@ -117,8 +118,21 @@ class Eject(object):
 
                 location, files = self._get_plugin_files(plugin_name)
                 for file in files:
-                    if file != "__init__.py":
+                    paths = file.split(os.sep, maxsplit=1)
+                    destination_file_name = paths[1]
+                    if destination_file_name != "__init__.py":
                         source_file = location.joinpath(file)
-                        destination_file = self._path.joinpath(
+                        destination_directory = self._path.joinpath(
                             "podder_task_foundation_plugins", "objects")
+                        destination_file = destination_directory.joinpath(
+                            destination_file_name)
+                        parent = destination_file.parent
+                        if not parent.exists():
+                            parent.mkdir(parents=True)
                         shutil.copy(source_file, destination_file)
+
+                FileUtility().execute_command("poetry",
+                                              ["remove", "plugin_name"])
+
+            self._path.joinpath("podder_task_foundation_plugins", "objects",
+                                "__init__.py").touch()

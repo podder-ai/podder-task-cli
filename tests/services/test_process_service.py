@@ -1,5 +1,6 @@
-from podder_task_cli.services import ProcessService
 from pathlib import Path
+
+from podder_task_cli.services import ProcessService
 
 
 def test_instance_create():
