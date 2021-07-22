@@ -8,7 +8,7 @@ import click
 from PyInquirer import prompt
 
 from ..entities import Entity
-from ..services import ProcessService
+from ..repositories import Repository
 from ..utilities import GitUtility
 
 
@@ -35,8 +35,24 @@ class Import(object):
                 self._target_repository),
                         fg="red")
             return False
-        process_service = ProcessService(destination_path)
-        processes = process_service.get_process_list()
+        repository = Repository(destination_path)
+        if repository.type == Repository.TYPE.PROJECT:
+            self._import_from_project(repository, destination_path)
+        elif repository.type == Repository.TYPE.LIBRARY:
+            self._import_from_library(repository, destination_path)
+        else:
+            click.secho("Seems this repository is not supported: {}".format(
+                self._target_repository),
+                        fg="red")
+            return False
+
+    def _import_from_library(self, repository: Repository,
+                             destination_path: Path):
+        pass
+
+    def _import_from_project(self, repository: Repository,
+                             destination_path: Path):
+        processes = repository.get_process_list()
         if self._processes is None or len(self._processes) == 0:
             self._processes = self._select_processes(processes)
         else:

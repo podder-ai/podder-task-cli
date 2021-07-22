@@ -18,9 +18,12 @@ class Eject(object):
         self._package_service = PackageService(self._path)
 
     def process(self):
+        console = Console()
+        console.print(
+            "\nEject command copy all podder task foundation related files to this directory and remove dependency.\n"
+        )
         if not Confirm.ask('Do you want to continue?'):
             return
-        console = Console()
         console.print("Installing Dependency...")
         dependencies = self._package_service.get_podder_task_foundation_dependencies(
         )
@@ -97,42 +100,52 @@ class Eject(object):
         location = info["location"]
         files = []
         for file in info["files"]:
-            if file.endswith(".py"):
-                files.append(file)
+            path_object = Path(file)
+            directory_tree = list(path_object.parents)
+            if len(directory_tree) == 0:
+                continue
+            if directory_tree[0].name.endswith(".dist-info"):
+                continue
+            if path_object.suffix == ".pyc":
+                continue
+            if str(file).startswith("../"):
+                continue
+            files.append(file)
 
         return Path(location), files
 
     def _copy_plugins(self):
         console = Console()
         plugins = self._package_service.get_all_plugins()
-        if "objects" in plugins:
-            for plugin_name in plugins["objects"].keys():
-                console.print("Ejecting Plugin: {} ...".format(plugin_name))
-                plugin = plugins["objects"][plugin_name]
-                dependencies = plugin["dependencies"]
-                filtered_dependencies = {}
-                for name in dependencies.keys():
-                    if not name.startswith("podder-task-foundation"):
-                        filtered_dependencies[name] = dependencies[name]
-                self._install_dependency(filtered_dependencies)
+        plugin_types = ["objects", "commands"]
+        for plugin_type in plugin_types:
+            if plugin_type in plugins:
+                for plugin_name in plugins[plugin_type].keys():
+                    console.print(
+                        "Ejecting Plugin: {} ...".format(plugin_name))
+                    plugin = plugins[plugin_type][plugin_name]
+                    dependencies = plugin["dependencies"]
+                    filtered_dependencies = {}
+                    for name in dependencies.keys():
+                        if not name.startswith("podder-task-foundation"):
+                            filtered_dependencies[name] = dependencies[name]
+                    self._install_dependency(filtered_dependencies)
 
-                location, files = self._get_plugin_files(plugin_name)
-                for file in files:
-                    paths = file.split(os.sep, maxsplit=1)
-                    destination_file_name = paths[1]
-                    if destination_file_name != "__init__.py":
+                    location, files = self._get_plugin_files(plugin_name)
+                    for file in files:
+                        console.print("    ... Copy: {}".format(str(file)))
                         source_file = location.joinpath(file)
                         destination_directory = self._path.joinpath(
-                            "podder_task_foundation_plugins", "objects")
-                        destination_file = destination_directory.joinpath(
-                            destination_file_name)
-                        parent = destination_file.parent
-                        if not parent.exists():
-                            parent.mkdir(parents=True)
+                            "podder_task_foundation_plugins", plugin_type)
+                        destination_file = destination_directory.joinpath(file)
+                        if not destination_file.parent.exists():
+                            destination_file.parent.mkdir(parents=True)
                         shutil.copy(source_file, destination_file)
 
-                FileUtility().execute_command("poetry",
-                                              ["remove", "plugin_name"])
+                    FileUtility().execute_command("poetry",
+                                                  ["remove", plugin_name])
 
-            self._path.joinpath("podder_task_foundation_plugins", "objects",
-                                "__init__.py").touch()
+                self._path.joinpath("podder_task_foundation_plugins",
+                                    "__init__.py").touch()
+                self._path.joinpath("podder_task_foundation_plugins",
+                                    plugin_type, "__init__.py").touch()

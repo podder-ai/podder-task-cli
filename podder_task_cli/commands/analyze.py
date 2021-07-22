@@ -4,14 +4,15 @@ from typing import Any, Dict, Optional
 
 import click
 
-from ..services import PackageService, ProcessService
+from ..repositories import Repository
+from ..services import PackageService
 
 
 class Analyze(object):
     def __init__(self, path: Path):
         self._path = path
         self._package_service = PackageService(self._path)
-        self._process_service = ProcessService(self._path)
+        self._repository = Repository(self._path)
 
     def process(self, json_output: bool = False):
         info = self._build_information()
@@ -52,7 +53,7 @@ class Analyze(object):
         if version is None:
             return None
         plugins = self._package_service.get_all_plugins()
-        processes = self._process_service.get_process_list()
+        processes = self._repository.get_process_list()
 
         return {
             "podder-task-foundation": {

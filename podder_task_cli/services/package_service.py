@@ -68,6 +68,10 @@ class PackageService(object):
 
         return plugins
 
-    def install_package(self, name: str, version: str):
-        self._file_utility.execute_command(
-            "poetry", ["add", "{}@{}".format(name, version)])
+    def install_package(self, name: str, version: Optional[str] = None):
+        if str is None:
+            self._file_utility.execute_command("poetry",
+                                               ["add", "{}".format(name)])
+        else:
+            self._file_utility.execute_command(
+                "poetry", ["add", "{}@{}".format(name, version)])

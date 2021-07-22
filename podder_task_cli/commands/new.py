@@ -10,6 +10,7 @@ from pathlib import Path
 import click
 from PyInquirer import prompt
 
+from ..services import PackageService
 from ..utilities import FileUtility, GitUtility, ProcessUtility
 from .process import Process
 
@@ -20,6 +21,7 @@ class New(object):
     def __init__(self, name: str, path: Path):
         self._name = name
         self._path = path
+        self._package_service = PackageService(self._path)
 
     def process(self):
         if not self.check_environment():
@@ -33,6 +35,7 @@ class New(object):
         self.update_files(data)
         self.create_process()
         self.exec_poetry()
+        self.add_plugins()
         click.echo("")
         click.secho("Project and process has been prepared for you !",
                     fg="green")
@@ -122,3 +125,19 @@ class New(object):
             raise KeyboardInterrupt
 
         return answers
+
+    def add_plugins(self):
+        answers = prompt([{
+            'type': 'confirm',
+            'name': "http_install",
+            'message': "Do you use HTTP API?",
+            'default': False,
+        }])
+        if "http_install" not in answers:
+            raise KeyboardInterrupt
+
+        if answers["http_install"]:
+            click.secho("Installing HTTP plugin...", fg="green")
+            self._package_service.install_package(
+                "git+ssh://git@github.com:podder-ai/podder-task-foundation-commands-http.git#main"
+            )
