@@ -76,7 +76,7 @@ class Eject(object):
     @staticmethod
     def _get_package_info(
             package_name: str) -> Dict[str, Union[str, List[str]]]:
-        lines = FileUtility().execute_command(
+        err, lines = FileUtility().execute_command(
             "poetry", ["run", "pip", "show", "-f", package_name]).split("\n")
         result = {}
         last_key = None

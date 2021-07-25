@@ -1,0 +1,26 @@
+from pathlib import Path
+
+from podder_task_foundation import Context, Payload
+from podder_task_foundation import Process as ProcessBase
+from {{ library_module }} import {{ library_name }}
+
+
+class Process(ProcessBase):
+    def initialize(self, context: Context) -> None:
+        # Initialization need to be done here
+        # Never do the initialization on execute method !
+        # - Model loading
+        # - Large text(json) file loading
+        # - Prepare some data
+        pass
+
+    def execute(self, input_payload: Payload, output_payload: Payload,
+                context: Context):
+        config = context.config.get()
+        library_instance = {{ library_name }}(config=config)
+
+{{ build_input }}
+
+        {{ outputs }} = library_instance.{{ library_method }}({{ inputs }})
+
+{{ build_payload }}

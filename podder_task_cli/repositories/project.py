@@ -6,8 +6,8 @@ from .repository import Repository
 class Project(Repository):
     _type = "other"
 
-    def __init__(self, path: Path):
-        super().__init__(path)
+    def __init__(self, path: Path, url: str):
+        super().__init__(path, url)
         self._process_list = None
 
     @classmethod

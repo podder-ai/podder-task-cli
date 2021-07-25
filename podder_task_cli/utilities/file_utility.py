@@ -1,6 +1,7 @@
 import shutil
 import subprocess
 from pathlib import Path
+from typing import Optional, Tuple
 
 from jinja2 import Template
 
@@ -15,10 +16,16 @@ class FileUtility(object):
         return True
 
     @staticmethod
-    def execute_command(name: str, arguments: list) -> str:
-        output = subprocess.getoutput("{} {}".format(name,
-                                                     " ".join(arguments)))
-        return output
+    def execute_command(name: str,
+                        arguments: Optional[list] = None) -> Tuple[bool, str]:
+        command = [name]
+        if arguments is not None:
+            command.extend(arguments)
+        try:
+            result = subprocess.check_output(command)
+            return True, result.decode("utf-8")
+        except subprocess.CalledProcessError as e:
+            return False, e.output.decode("utf-8")
 
     @staticmethod
     def update_target_file(path: Path, data: dict):

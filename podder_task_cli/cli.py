@@ -48,4 +48,4 @@ def analyze(json_output):
 def _import(process_name: str, target_repository: str):
     Import(target_repository=target_repository,
            processes=process_name,
-           base_directory=Path("./")).process()
+           base_path=Path("./")).process()

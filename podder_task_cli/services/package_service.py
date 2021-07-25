@@ -53,7 +53,7 @@ class PackageService(object):
 
     def get_all_plugins(self) -> Dict[str, Dict[str, Any]]:
         plugins = {}
-        libraries = self._file_utility.execute_command(
+        err, libraries = self._file_utility.execute_command(
             "poetry", ["run", "pip", "list"]).split("\n")
         for library in libraries:
             if library.startswith("podder-task-foundation-"):
@@ -68,10 +68,14 @@ class PackageService(object):
 
         return plugins
 
-    def install_package(self, name: str, version: Optional[str] = None):
-        if str is None:
-            self._file_utility.execute_command("poetry",
-                                               ["add", "{}".format(name)])
+    def install_package(self,
+                        name: str,
+                        version: Optional[str] = None) -> bool:
+        if version is None:
+            success, result = self._file_utility.execute_command(
+                "poetry", ["add", name])
         else:
-            self._file_utility.execute_command(
+            success, result = self._file_utility.execute_command(
                 "poetry", ["add", "{}@{}".format(name, version)])
+
+        return success
