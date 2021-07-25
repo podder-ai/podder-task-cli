@@ -53,9 +53,9 @@ class PackageService(object):
 
     def get_all_plugins(self) -> Dict[str, Dict[str, Any]]:
         plugins = {}
-        err, libraries = self._file_utility.execute_command(
-            "poetry", ["run", "pip", "list"]).split("\n")
-        for library in libraries:
+        success, libraries = self._file_utility.execute_command(
+            "poetry", ["run", "pip", "list"])
+        for library in libraries.split("\n"):
             if library.startswith("podder-task-foundation-"):
                 plugin_name = library.split(" ")[0]
                 plugin_type = plugin_name.split("-")[3]

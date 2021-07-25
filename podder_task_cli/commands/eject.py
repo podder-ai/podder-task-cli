@@ -76,11 +76,11 @@ class Eject(object):
     @staticmethod
     def _get_package_info(
             package_name: str) -> Dict[str, Union[str, List[str]]]:
-        err, lines = FileUtility().execute_command(
-            "poetry", ["run", "pip", "show", "-f", package_name]).split("\n")
+        success, lines = FileUtility().execute_command(
+            "poetry", ["run", "pip", "show", "-f", package_name])
         result = {}
         last_key = None
-        for line in lines:
+        for line in lines.split("\n"):
             pair = line.split(": ", maxsplit=1)
             if len(pair) == 1:
                 if line.endswith(":"):
@@ -142,8 +142,11 @@ class Eject(object):
                             destination_file.parent.mkdir(parents=True)
                         shutil.copy(source_file, destination_file)
 
-                    FileUtility().execute_command("poetry",
-                                                  ["remove", plugin_name])
+                    success, result = FileUtility().execute_command(
+                        "poetry", ["remove", plugin_name])
+                    if not success:
+                        console.print("Failed to remove plugin: {}\n{}".format(
+                            plugin_name, result))
 
                 self._path.joinpath("podder_task_foundation_plugins",
                                     "__init__.py").touch()

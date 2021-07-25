@@ -89,9 +89,9 @@ class ImportLibrary(ImportBase):
 
         for name, data_type in self._decide_data_name(raw_inputs).items():
             build_input.append(
-                "        {} = input_payload.get(object_type=\"{}\")".format(
-                    name, data_type))
-            inputs.append("{}.data".format(name))
+                "        input_{} = input_payload.get(object_type=\"{}\")".
+                format(name, data_type))
+            inputs.append("input_{}.data".format(name))
 
         return "\n".join(build_input), " ,".join(inputs)
 
@@ -101,10 +101,10 @@ class ImportLibrary(ImportBase):
         build_payload = []
 
         for name, data_type in self._decide_data_name(raw_outputs).items():
-            outputs.append("{}".format(name))
+            outputs.append("output_{}".format(name))
             build_payload.append(
-                "        output_payload.add_{}({}, name=\"{}\")".format(
-                    data_type, name, data_type))
+                "        output_payload.add_{}(output_{}, name=\"{}\")".format(
+                    data_type, name, name))
 
         return ", ".join(outputs), "\n".join(build_payload)
 
