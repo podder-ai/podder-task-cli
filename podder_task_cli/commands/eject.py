@@ -73,50 +73,22 @@ class Eject(object):
                         "podder-task-foundation-{}".format(version)).joinpath(
                             "podder_task_foundation")), str(self._path))
 
-    @staticmethod
-    def _get_package_info(
-            package_name: str) -> Dict[str, Union[str, List[str]]]:
-        success, lines = FileUtility().execute_command(
-            "poetry", ["run", "pip", "show", "-f", package_name])
-        result = {}
-        last_key = None
-        for line in lines.split("\n"):
-            pair = line.split(": ", maxsplit=1)
-            if len(pair) == 1:
-                if line.endswith(":"):
-                    key = line[:-1].strip().lower()
-                    result[key] = []
-                    last_key = key
-                elif last_key is not None:
-                    result[last_key].append(line.strip())
-            else:
-                result[pair[0].lower()] = pair[1]
-
-        return result
-
     def _get_plugin_files(self, package_name: str) -> Tuple[Path, List[str]]:
-
-        info = self._get_package_info(package_name)
-        location = info["location"]
+        base_path, all_files = self._package_service.get_package_files(
+            package_name)
         files = []
-        for file in info["files"]:
+        for file in all_files:
             path_object = Path(file)
             directory_tree = list(path_object.parents)
-            if len(directory_tree) == 0:
-                continue
             if directory_tree[0].name.endswith(".dist-info"):
-                continue
-            if path_object.suffix == ".pyc":
-                continue
-            if str(file).startswith("../"):
                 continue
             files.append(file)
 
-        return Path(location), files
+        return base_path, files
 
     def _copy_plugins(self):
         console = Console()
-        plugins = self._package_service.get_all_plugins()
+        plugins = self._package_service.get_installed_plugins()
         plugin_types = ["objects", "commands"]
         for plugin_type in plugin_types:
             if plugin_type in plugins:

@@ -25,6 +25,12 @@ class GitUtility(object):
             return False
         return True
 
+    def update_repository(self, repository_path: Path) -> bool:
+        result = self.execute_git_command("pull", repository_path)
+        if result.startswith("error"):
+            return False
+        return True
+
     def get_revision(self, repository_path: Path) -> str:
         result = self.execute_git_command("rev-parse HEAD", repository_path)
         return result

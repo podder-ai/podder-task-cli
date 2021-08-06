@@ -52,7 +52,7 @@ class Analyze(object):
         version = self._package_service.get_podder_task_foundation_version()
         if version is None:
             return None
-        plugins = self._package_service.get_all_plugins()
+        plugins = self._package_service.get_installed_plugins()
         processes = self._repository.get_process_list()
 
         return {

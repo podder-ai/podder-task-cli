@@ -4,6 +4,7 @@ import click
 
 from podder_task_cli.commands import (Analyze, Eject, Import, Inspect, New,
                                       Process)
+from podder_task_cli.commands.plugin import Install, List
 
 from . import __version__
 
@@ -49,3 +50,34 @@ def _import(process_name: str, target_repository: str):
     Import(target_repository=target_repository,
            processes=process_name,
            base_path=Path("./")).process()
+
+
+@main.group()
+def library():
+    pass
+
+
+@library.command()
+def init():
+    pass
+
+
+@library.command()
+def check():
+    pass
+
+
+@main.group()
+def plugin():
+    pass
+
+
+@plugin.command(name='list')
+def _list():
+    List(path=Path("./")).process()
+
+
+@plugin.command()
+@click.argument('plugin_name')
+def install(plugin_name: str):
+    Install(path=Path("./")).process(plugin_name)
