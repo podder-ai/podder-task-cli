@@ -13,3 +13,7 @@ class PluginInfo(Entity):
     @property
     def description(self) -> str:
         return self.get("description", "")
+
+    @property
+    def branch(self) -> str:
+        return self.get("branch", "")

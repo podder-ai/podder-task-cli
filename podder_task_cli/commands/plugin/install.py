@@ -27,17 +27,21 @@ class Install(Plugin):
                     fg="red")
                 return
 
-            version = self._find_plugin_from_installed_plugins(plugin_name)
-            if version is None:
-                success = self._install_plugin_by_git(plugin_name, version)
+            print(plugin_info.repository)
+            current_version = self._find_plugin_from_installed_plugins(
+                plugin_name)
+            if current_version is None:
+                success = self._install_plugin_by_git(plugin_info.repository,
+                                                      plugin_info.branch)
             else:
                 console = Console()
                 console.print(
                     "\n{} is already installed ( Installed version: {} ).".
-                    format(plugin_name, version))
+                    format(plugin_name, current_version))
                 if not Confirm.ask('Do you want to update to new version?'):
                     return
-                success = self._update_plugin_by_git(plugin_name, version)
+                success = self._update_plugin_by_git(plugin_info.repository,
+                                                     plugin_info.branch)
 
         if not success:
             click.secho("Failed to install plugin {}".format(plugin_name),

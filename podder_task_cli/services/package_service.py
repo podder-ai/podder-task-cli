@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
+import click
 import toml
 
 from ..utilities import FileUtility
@@ -108,6 +109,9 @@ class PackageService(object):
         else:
             success, result = self._file_utility.execute_command(
                 "poetry", ["add", "{}@{}".format(name, version)])
+
+        if not success:
+            click.secho(result, color="red")
 
         return success
 

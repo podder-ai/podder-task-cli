@@ -29,7 +29,7 @@ class ImportProject(ImportBase):
                     return False
 
         for process in self._processes:
-            self._import_process(process, self._base_path)
+            self._import_process(process, self._repository.path)
 
         return self._processes
 
