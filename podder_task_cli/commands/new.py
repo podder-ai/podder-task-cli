@@ -11,7 +11,7 @@ import click
 from PyInquirer import prompt
 
 from ..services import PackageService
-from ..utilities import FileUtility, GitUtility, ProcessUtility
+from ..utilities import FileUtility, GitUtility
 from .process import Process
 
 

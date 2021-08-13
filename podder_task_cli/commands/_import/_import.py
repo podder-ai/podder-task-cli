@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Optional
 
 import click
 
@@ -63,11 +62,3 @@ class Import(object):
         path = self._base_path.joinpath("processes", name,
                                         ".podder.process.conf")
         entity.save(path)
-
-    def _get_metadata(self, name: str) -> Optional[Entity]:
-        path = self._base_path.joinpath("processes", name,
-                                        ".podder.process.conf")
-        if not path.exists():
-            return None
-        entity = Entity.load(path)
-        return entity

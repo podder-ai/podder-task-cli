@@ -1,9 +1,8 @@
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional
 
 from ..entities import PluginInfo
 from ..utilities import GitUtility
-from .package_service import PackageService
 
 
 class PodderService(object):

@@ -40,17 +40,21 @@ class ImportProject(ImportBase):
             choices.append({
                 "name": process,
             })
-        questions = [
-            {
-                'type': 'checkbox',
-                'qmark': '>',
-                'message': 'Select processes which you want to import to your project',
-                'name': 'processes',
-                'choices': choices,
-                'validate': lambda answer: 'You must select at least one process.' \
-                    if len(answer) == 0 else True
-            }
-        ]
+        questions = [{
+            'type':
+            'checkbox',
+            'qmark':
+            '>',
+            'message':
+            'Select processes which you want to import to your project',
+            'name':
+            'processes',
+            'choices':
+            choices,
+            'validate':
+            lambda answer: 'You must select at least one process.'
+            if len(answer) == 0 else True
+        }]
         answers = prompt(questions)
         return answers["processes"]
 
@@ -63,7 +67,7 @@ class ImportProject(ImportBase):
             click.secho("Process {} already exists.".format(process_name),
                         fg="red")
             return False
-        if entity.base_repository != self._target_repository:
+        if entity.base_repository != self._repository:
             click.secho(
                 "Process {} already exists and imported from different repository {}."
                 .format(process_name, entity.base_repository),
@@ -71,8 +75,7 @@ class ImportProject(ImportBase):
             return False
 
         click.secho(
-            "Process {} already exists and imported from the same repository.".
-            format(process_name, entity.base_repository),
+            f"Process {process_name} already exists and imported from the same repository.",
             fg="red")
         return False
 

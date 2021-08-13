@@ -2,7 +2,7 @@ import json
 import shutil
 from collections import OrderedDict
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Tuple
 
 import click
 

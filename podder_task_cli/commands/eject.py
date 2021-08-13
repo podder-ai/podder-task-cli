@@ -1,10 +1,9 @@
-import os
 import shutil
 import tempfile
 import urllib.request
 import zipfile
 from pathlib import Path
-from typing import Dict, List, Tuple, Union
+from typing import List, Tuple
 
 from rich.prompt import Confirm, Console
 
