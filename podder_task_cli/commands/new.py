@@ -138,6 +138,8 @@ class New(object):
 
         if answers["http_install"]:
             click.secho("Installing HTTP plugin...", fg="green")
+            os.chdir('./{}'.format(self._name))
             self._package_service.install_package(
                 "git+ssh://git@github.com:podder-ai/podder-task-foundation-commands-http.git#main"
             )
+            os.chdir('../')

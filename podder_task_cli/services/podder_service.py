@@ -47,3 +47,6 @@ class PodderService(object):
                     results[directory.name][plugin_info.name] = plugin_info
 
         return results
+
+    def download_latest_cli_version(self):
+        uri = "https://raw.githubusercontent.com/podder-ai/podder-task-cli/main/pyproject.toml"

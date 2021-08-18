@@ -21,21 +21,39 @@ class Import(object):
         self._target_repository = target_repository
         self._processes = list(processes)
         self._base_path = base_path
+
         self._template_directory = Path(__file__).parent.joinpath(
             "..", "templates")
         self._package_service = PackageService(self._base_path)
 
+    def _is_repository_local(self) -> bool:
+        target_path = Path(self._target_repository)
+        if target_path.suffix == ".git":
+            return False
+
+        return True
+
     def process(self):
         temporary_directory_object = TemporaryDirectory()
-        destination_path = Path(
-            str(temporary_directory_object.name) + os.sep + "repository")
-        success = GitUtility().clone_repository(self._target_repository,
-                                                destination_path)
-        if not success:
-            click.secho("Clone repository failed: {}".format(
-                self._target_repository),
-                        fg="red")
-            return False
+        if self._is_repository_local():
+            destination_path = Path(
+                self._target_repository).resolve().absolute()
+            if not destination_path.exists():
+                click.secho("Source directory did not found: {}".format(
+                    str(destination_path)),
+                            fg="red")
+                return False
+        else:
+            destination_path = Path(
+                str(temporary_directory_object.name) + os.sep + "repository")
+            success = GitUtility().clone_repository(self._target_repository,
+                                                    destination_path)
+            if not success:
+                click.secho("Clone repository failed: {}".format(
+                    self._target_repository),
+                            fg="red")
+                return False
+
         repository = get_repository(path=destination_path,
                                     url=self._target_repository)
 
@@ -55,8 +73,11 @@ class Import(object):
 
     def _set_metadata(self, name: str, repository: Repository):
         revision = repository.revision
+        target_repository = self._target_repository
+        if self._is_repository_local():
+            target_repository = "local"
         entity = Entity({
-            "base_repository": self._target_repository,
+            "base_repository": target_repository,
             "revision": revision,
         })
         path = self._base_path.joinpath("processes", name,
