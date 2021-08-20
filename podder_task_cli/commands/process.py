@@ -5,6 +5,7 @@ from pathlib import Path
 import click
 from PyInquirer import prompt
 
+from ..services import PackageService
 from ..utilities import FileUtility, ProcessUtility
 
 
@@ -15,6 +16,7 @@ class Process(object):
     def __init__(self, name: str, base_directory: Path):
         self._name = name
         self._base_directory = base_directory
+        self._package_service = PackageService(self._base_directory)
         self._template_directory = Path(__file__).parent.joinpath(
             "..", "templates")
 
@@ -26,6 +28,7 @@ class Process(object):
         self.prepare_directory()
         self.copy_files()
         self.update_files(data)
+        self.install_plugins(data)
 
     def _get_process_path(self) -> Path:
         return self._base_directory.joinpath("processes", self._name)
@@ -137,3 +140,21 @@ class Process(object):
                 answers.update(index_answers)
 
         return answers
+
+    def install_plugins(self, data: dict):
+        required_plugins = set()
+        for io_type in ["input", "output"]:
+            if data[io_type]["count"] > 0:
+                for index in range(0, data[io_type]["count"]):
+                    type_key = "type_{}".format(index + 1)
+                    data_type = data[io_type][type_key]
+                    data_type_object = ProcessUtility.object_types[data_type]
+                    if "package" in data_type_object and data_type_object[
+                            "package"] is not None:
+                        required_plugins.add(data_type_object["package"])
+
+        if len(required_plugins) > 0:
+            click.secho("Installing object plugins...", fg="green")
+            for plugin_repository in required_plugins:
+                click.secho("  ..{}".format(plugin_repository))
+                self._package_service.install_package(plugin_repository)

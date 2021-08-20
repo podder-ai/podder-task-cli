@@ -9,8 +9,10 @@ class ProcessUtility(object):
             "package": None,
         },
         'Image': {
-            "empty": "None",
-            "package": None,
+            "empty":
+            "None",
+            "package":
+            "git+ssh://git@github.com:podder-ai/podder-task-foundation-objects-image.git#main",
         },
         'PDF': {
             "empty": "None",
@@ -27,6 +29,7 @@ class ProcessUtility(object):
 
     def generate_output_code(self, name: str, object_type: str) -> [str]:
         return [
+            "# please set data for output",
             "{} = {}".format(name, self.object_types[object_type]["empty"]),
-            "output_payload.add_{}({})".format(name, name, object_type.lower())
+            "output_payload.add_{}({})".format(object_type.lower(), name)
         ]

@@ -33,8 +33,8 @@ class New(object):
         }
         self.prepare_directory()
         self.update_files(data)
-        self.create_process()
         self.exec_poetry()
+        self.create_process()
         self.add_plugins()
         click.echo("")
         click.secho("Project and process has been prepared for you !",
@@ -88,8 +88,10 @@ class New(object):
         FileUtility().update_target_file(pyproject, data)
 
     def create_process(self):
+        os.chdir('./{}'.format(self._name))
         Process(name=self._name,
                 base_directory=self._path.joinpath(self._name)).process()
+        os.chdir('../')
 
     def exec_poetry(self):
         click.secho("Executing poetry install to install required packages...",
