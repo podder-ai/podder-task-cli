@@ -14,6 +14,7 @@ class Process(object):
 
     def __init__(self, name: str, base_directory: Path):
         self._name = name
+        self._process_name = self._convert_kebab_to_snake(name)
         self._base_directory = base_directory
         self._template_directory = Path(__file__).parent.joinpath(
             "..", "templates")
@@ -28,7 +29,7 @@ class Process(object):
         self.update_files(data)
 
     def _get_process_path(self) -> Path:
-        return self._base_directory.joinpath("processes", self._name)
+        return self._base_directory.joinpath("processes", self._process_name)
 
     def prepare_directory(self):
         click.secho("Creating directory for your process named {}...".format(
@@ -38,7 +39,7 @@ class Process(object):
             original_path = self._base_directory.joinpath(directory).joinpath(
                 "task_name")
             renamed_path = self._base_directory.joinpath(directory).joinpath(
-                self._name)
+                self._process_name)
             if original_path.exists():
                 original_path.rename(renamed_path)
             else:
@@ -137,3 +138,7 @@ class Process(object):
                 answers.update(index_answers)
 
         return answers
+
+    @staticmethod
+    def _convert_kebab_to_snake(name: str) -> str:
+        return name.replace("-", "_")
