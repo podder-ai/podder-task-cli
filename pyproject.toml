@@ -7,7 +7,7 @@ authors = ["Takaaki Mizuno <takaaki.mizuno@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.6.2"
 click = "^7.1.2"
-flake8 = "^3.8.4"
+flake8 = "^3.9.2"
 toml = "^0.10.2"
 rich = "^9.3.0"
 PyInquirer = "^1.0.3"
@@ -19,7 +19,6 @@ requests = "^2.26.0"
 pytest = "^5.2"
 yapf = "^0.30.0"
 isort = "^5.9.2"
-flake8 = "^3.9.2"
 pytest-cov = "^2.12.1"
 
 [build-system]

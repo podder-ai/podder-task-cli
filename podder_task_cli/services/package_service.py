@@ -1,5 +1,6 @@
 import configparser
 import json
+from modulefinder import ModuleFinder
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
@@ -162,3 +163,9 @@ class PackageService(object):
                                 }
 
         return plugins
+
+    def get_all_used_packages(self, path: Path) -> Dict:
+        finder = ModuleFinder()
+        finder.run_script(str(path))
+
+        return finder.badmodules

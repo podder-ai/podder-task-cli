@@ -89,8 +89,7 @@ class New(object):
 
     def create_process(self):
         os.chdir('./{}'.format(self._name))
-        Process(name=self._name,
-                base_directory=self._path.joinpath(self._name)).process()
+        Process(name=self._name, base_directory=self._path).process()
         os.chdir('../')
 
     def exec_poetry(self):

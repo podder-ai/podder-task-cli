@@ -6,6 +6,7 @@ from PyInquirer import prompt
 
 from podder_task_cli.repositories import Project
 
+from ...services import PackageService
 from .import_base import ImportBase
 
 
@@ -14,6 +15,7 @@ class ImportProject(ImportBase):
         super().__init__(repository, base_path)
         self._repository = repository
         self._processes = []
+        self._package_service = PackageService(base_path)
 
     def execute(self) -> [str]:
         processes = self._repository.get_process_list()
@@ -30,6 +32,8 @@ class ImportProject(ImportBase):
 
         for process in self._processes:
             self._import_process(process, self._repository.path)
+
+        self._add_required_libraries()
 
         return self._processes
 
@@ -96,3 +100,10 @@ class ImportProject(ImportBase):
                     self._base_path.joinpath(directory_name, name))
             else:
                 self._base_path.joinpath(directory_name, name).mkdir()
+
+    def _add_required_libraries(self):
+        for process in self._processes:
+            process_path = self._base_path.joinpath("processes", process,
+                                                    "process.py")
+            libraries = self._package_service.get_all_used_packages(
+                process_path)
