@@ -117,7 +117,7 @@ class New(object):
                 "Please input author email",
                 'validate':
                 lambda email: bool(
-                    re.search(r"^[\w\.\+\-]+\@[\w]+\.[a-z]{2,3}$", email)),
+                    re.search(r"^[\w\.\+\-]+\@[\w]+\.[a-zA-Z]{2,}$", email)),
                 'default':
                 GitUtility().get_config("user.email", default=""),
             },

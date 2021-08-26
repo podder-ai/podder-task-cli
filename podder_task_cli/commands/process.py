@@ -15,6 +15,7 @@ class Process(object):
 
     def __init__(self, name: str, base_directory: Path):
         self._name = name
+        self._process_name = self._convert_kebab_to_snake(name)
         self._base_directory = base_directory
         self._package_service = PackageService(self._base_directory)
         self._template_directory = Path(__file__).parent.joinpath(
@@ -31,7 +32,7 @@ class Process(object):
         self.install_plugins(data)
 
     def _get_process_path(self) -> Path:
-        return self._base_directory.joinpath("processes", self._name)
+        return self._base_directory.joinpath("processes", self._process_name)
 
     def prepare_directory(self):
         click.secho("Creating directory for your process named {}...".format(
@@ -41,7 +42,7 @@ class Process(object):
             original_path = self._base_directory.joinpath(directory).joinpath(
                 "task_name")
             renamed_path = self._base_directory.joinpath(directory).joinpath(
-                self._name)
+                self._process_name)
             if original_path.exists():
                 original_path.rename(renamed_path)
             else:
@@ -158,3 +159,7 @@ class Process(object):
             for plugin_repository in required_plugins:
                 click.secho("  ..{}".format(plugin_repository))
                 self._package_service.install_package(plugin_repository)
+
+    @staticmethod
+    def _convert_kebab_to_snake(name: str) -> str:
+        return name.replace("-", "_")
