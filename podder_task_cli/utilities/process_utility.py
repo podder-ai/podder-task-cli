@@ -12,7 +12,7 @@ class ProcessUtility(object):
             "empty":
             "None",
             "package":
-            "git+ssh://git@github.com:podder-ai/podder-task-foundation-objects-image.git#main",
+            "git+ssh://git@github.com:podder-ai/podder-task-foundation-objects-image.git",
         },
         'PDF': {
             "empty": "None",

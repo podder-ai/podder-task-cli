@@ -16,7 +16,7 @@ from .process import Process
 
 
 class New(object):
-    _podder_task = "https://github.com/podder-ai/podder-task-base/archive/main.zip"
+    _podder_task = "https://github.com/podder-ai/podder-task-base/archive/master.zip"
 
     def __init__(self, name: str, path: Path):
         self._name = name
@@ -80,8 +80,9 @@ class New(object):
             urllib.request.urlretrieve(self._podder_task, str(write_path))
             with zipfile.ZipFile(str(write_path)) as zip_package:
                 zip_package.extractall(temp_path)
-            shutil.move(str(Path(temp_path).joinpath("podder-task-base-main")),
-                        str(self._path.joinpath(self._name)))
+            shutil.move(
+                str(Path(temp_path).joinpath("podder-task-base-master")),
+                str(self._path.joinpath(self._name)))
 
     def update_files(self, data: dict):
         pyproject = self._path.joinpath(self._name, "pyproject.toml")
@@ -141,6 +142,6 @@ class New(object):
             click.secho("Installing HTTP plugin...", fg="green")
             os.chdir('./{}'.format(self._name))
             self._package_service.install_package(
-                "git+ssh://git@github.com:podder-ai/podder-task-foundation-commands-http.git#main"
+                "git+ssh://git@github.com:podder-ai/podder-task-foundation-commands-http.git"
             )
             os.chdir('../')
