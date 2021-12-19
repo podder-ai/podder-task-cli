@@ -1,0 +1,15 @@
+name: test
+dependencies:
+  - source_repository: "https://github.com/test/abc.git"
+    source_process: "test_process"
+    name: "test_name1"
+    version: "1.0.0"
+  - source_repository: "https://github.com/test/abc.git"
+    source_process: "test_process2"
+    name: "test_name2"
+    version: "1.0.2"
+data:
+  - source_url: "https://example.com/xxx.dat"
+    destination_path: ["test_process/abc"]
+  - source_url: "https://example.com/xxx2.dat"
+    destination_path: ["other_process/abc"]
