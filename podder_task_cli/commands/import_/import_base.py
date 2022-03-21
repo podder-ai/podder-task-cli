@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
-from ...entities import Entity
+from ...services.podder_service.entities import Entity
 from .sources import Source
 
 

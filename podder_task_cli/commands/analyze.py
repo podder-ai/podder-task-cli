@@ -4,7 +4,7 @@ from typing import Any, Dict, Optional
 
 import click
 
-from podder_task_cli.commands.import_.sources import Source
+from podder_task_cli.commands.import_.sources.project import Project
 
 from ..services import PackageService
 
@@ -13,7 +13,7 @@ class Analyze(object):
     def __init__(self, path: Path):
         self._path = path
         self._package_service = PackageService(self._path)
-        self._source = Source(self._path)
+        self._source = Project(self._path, url="")
 
     def process(self, json_output: bool = False):
         info = self._build_information()

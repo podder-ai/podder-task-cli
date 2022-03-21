@@ -1,7 +1,7 @@
 from .entity import Entity
 
 
-class Dependency(Entity):
+class Import(Entity):
     _properties = {
         "name": str,
         "source_repository": str,

@@ -1,6 +1,6 @@
 import click
 
-from ...entities import Interface
+from ...services.podder_service.entities import Interface
 from .library import Library
 
 

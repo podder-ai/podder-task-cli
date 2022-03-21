@@ -1,17 +1,22 @@
-import click
+from typing import Optional
+
+import rich
 
 
 class TerminalUtility(object):
     class Style:
-        Normal = {"color": None, "bold": False},
-        Info = {"color": "green", "bold": False},
-        Warning = {"color": "yellow", "bold": False},
-        Error = {"color": "red", "bold": False},
-        Header = {"color": "green", "bold": True},
+        Normal = None
+        Info = "green"
+        Warning = "yellow"
+        Error = "bold red"
+        Header = "bold green"
 
-    @staticmethod
-    def print(message: str, new_line=True, style: dict = Style.Normal):
-        click.secho(message,
-                    nl=new_line,
-                    color=style["color"],
-                    bold=style["bold"])
+    def __init__(self):
+        self._console = rich.get_console()
+
+    def print(self,
+              message: str,
+              new_line=True,
+              style: Optional[str] = Style.Normal):
+        end = "\n" if new_line else ""
+        self._console.print(message, style=style, end=end)

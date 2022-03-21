@@ -1,0 +1,2 @@
+class LibraryService(object):
+    pass

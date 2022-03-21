@@ -13,7 +13,7 @@ from .entities import PluginInfo
 
 
 class GlobalConfigManager(object):
-    version_uri = "https://raw.githubusercontent.com/podder-ai/podder-task-cli/main/pyproject.toml"
+    version_uri = "https://raw.githubusercontent.com/podder-ai/podder-task-cli/master/pyproject.toml"
     plugin_repository = "git@github.com:podder-ai/podder-task-foundation-plugin-registry.git"
 
     def __init__(self, project_path: Optional[Path] = None):
@@ -61,7 +61,8 @@ class GlobalConfigManager(object):
 
     def check_cli_version(self) -> Optional[str]:
         current_version = version.parse(self.get_current_cli_version())
-        latest_version, latest_update = self.get_current_cli_version()
+        latest_version, latest_update = self.get_stored_cli_version()
+
         if latest_version is None:
             self.download_latest_cli_version()
             return None
@@ -80,31 +81,45 @@ class GlobalConfigManager(object):
         from podder_task_cli import __version__
         return __version__
 
-    def get_stored_cli_version(self) -> Optional[Tuple[str, int]]:
+    def get_stored_cli_version(self) -> Tuple[Optional[str], Optional[int]]:
         version_path = self.get_cli_version_info_path()
         if not version_path.exists():
-            return None
+            return None, None
         with version_path.open(encoding="utf-8") as file:
             data = yaml.safe_load(file)
-            if "version" not in data:
-                return None
+            if "latest_version" not in data:
+                return None, None
 
-            version = data["version"]
+            _version = data["latest_version"]
             if "last_update_time" in data and isinstance(
                     data["last_update_time"], int):
                 last_update_time = data["last_update_time"]
             else:
                 last_update_time = int(time.time())
 
-            return version, last_update_time
+            return _version, last_update_time
 
-    async def download_latest_cli_version(self) -> Optional[Tuple[str, int]]:
+    def store_cli_version(self, latest_version: str, last_update_time: int):
+        version_path = self.get_cli_version_info_path()
+        with version_path.open(encoding="utf-8", mode="w") as file:
+            yaml.dump(
+                {
+                    "latest_version": latest_version,
+                    "last_update_time": last_update_time
+                }, file)
+
+    def download_latest_cli_version(self) -> Optional[Tuple[str, int]]:
         response = requests.get(self.version_uri)
         if response.status_code != 200:
             return None
 
         data = toml.loads(response.text)
-        if "tool.poetry" in data and "version" in data["tool.poetry"]:
-            return data["tool.poetry"]["version"], int(time.time())
+
+        if "tool" in data and "poetry" in data["tool"] and "version" in data[
+                "tool"]["poetry"]:
+            latest_version = data["tool"]["poetry"]["version"]
+            last_update_time = int(time.time())
+            self.store_cli_version(latest_version, last_update_time)
+            return latest_version, last_update_time
 
         return None

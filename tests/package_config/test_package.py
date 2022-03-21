@@ -16,4 +16,4 @@ def test_package_config_to_dict():
     dict_data = package.to_dict()
     assert dict_data is not None
     assert dict_data["name"] is not None
-    assert len(dict_data["dependencies"]) == 2
+    assert len(dict_data["imports"]) == 2

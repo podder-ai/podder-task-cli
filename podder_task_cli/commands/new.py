@@ -87,6 +87,8 @@ class New(object):
     def update_files(self, data: dict):
         pyproject = self._path.joinpath(self._name, "pyproject.toml")
         FileUtility().update_target_file(pyproject, data)
+        podder_config = self._path.joinpath(self._name, "podder.yaml")
+        FileUtility().update_target_file(podder_config, data)
 
     def create_process(self):
         os.chdir('./{}'.format(self._name))

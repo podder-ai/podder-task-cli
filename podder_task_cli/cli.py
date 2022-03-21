@@ -4,14 +4,19 @@ import click
 
 from podder_task_cli.commands import (Analyze, Eject, Import, Inspect, Install,
                                       New, Process)
-from podder_task_cli.commands.plugin import Install, List
+from podder_task_cli.commands.plugin import Install as PluginInstall
+from podder_task_cli.commands.plugin import List as PluginList
 from podder_task_cli.services import PodderService
 
 from . import __version__
 
 
 @click.group()
-@click.version_option(__version__, prog_name="Podder Task CLI")
+@click.version_option(__version__,
+                      "-v",
+                      "--version",
+                      "-version",
+                      prog_name="Podder Task CLI")
 def main():
     PodderService(project_path=Path("./")).check_cli_version()
 
@@ -23,7 +28,7 @@ def new(name: str):
 
 
 @main.command()
-def install(name: str):
+def install():
     Install(path=Path("./")).process()
 
 
@@ -80,10 +85,10 @@ def plugin():
 
 @plugin.command(name='list')
 def _list():
-    List(path=Path("./")).process()
+    PluginList(path=Path("./")).process()
 
 
 @plugin.command()
 @click.argument('plugin_name')
 def install(plugin_name: str):
-    Install(path=Path("./")).process(plugin_name)
+    PluginInstall(path=Path("./")).process(plugin_name)

@@ -4,8 +4,8 @@ from tempfile import TemporaryDirectory
 
 import click
 
-from ...entities import Entity
 from ...services import PackageService
+from ...services.podder_service.entities import Entity
 from ...utilities import GitUtility
 from .import_library import ImportLibrary
 from .import_project import ImportProject

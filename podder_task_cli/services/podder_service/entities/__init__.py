@@ -1,5 +1,6 @@
+from ._import import Import
+from .command import Command
 from .data import Data
-from .dependency import Dependency
 from .entity import Entity
 from .interface import Interface
 from .package import Package

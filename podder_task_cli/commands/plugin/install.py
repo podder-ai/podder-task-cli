@@ -4,8 +4,8 @@ from typing import Optional
 import click
 from rich.prompt import Confirm, Console
 
-from ...entities import PluginInfo
 from ...services import PackageService, PodderService
+from ...services.podder_service.entities import PluginInfo
 from .plugin import Plugin
 
 
@@ -13,7 +13,7 @@ class Install(Plugin):
     def __init__(self, path: Path):
         super().__init__(path)
         self._package_service = PackageService(self._path)
-        self._podder_service = PodderService()
+        self._podder_service = PodderService(project_path=self._path)
 
     def process(self, plugin_name: str, version: Optional[str] = None):
         if plugin_name.endswith(".git"):

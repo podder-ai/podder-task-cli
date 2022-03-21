@@ -14,6 +14,10 @@ class ProcessUtility(object):
             "package":
             "git+ssh://git@github.com:podder-ai/podder-task-foundation-objects-image.git",
         },
+        'CSV': {
+            "empty": "[]",
+            "package": None,
+        },
         'PDF': {
             "empty": "None",
             "package": None,
@@ -31,5 +35,6 @@ class ProcessUtility(object):
         return [
             "# please set data for output",
             "{} = {}".format(name, self.object_types[object_type]["empty"]),
-            "output_payload.add_{}({})".format(object_type.lower(), name)
+            "output_payload.add_{}({}, name=\"{}\")".format(
+                object_type.lower(), name, name)
         ]

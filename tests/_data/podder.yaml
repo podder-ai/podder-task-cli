@@ -1,5 +1,5 @@
 name: test
-dependencies:
+imports:
   - source_repository: "https://github.com/test/abc.git"
     source_process: "test_process"
     name: "test_name1"
@@ -13,3 +13,5 @@ data:
     destination_path: ["test_process/abc"]
   - source_url: "https://example.com/xxx2.dat"
     destination_path: ["other_process/abc"]
+commands:
+  - command: "poetry run spacy download en_core_web_sm"
