@@ -1,6 +1,6 @@
 import shutil
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 from tqdm import tqdm
 
@@ -64,3 +64,10 @@ class DataManager(object):
 
             for progress_bar in progress_bars:
                 progress_bar.close()
+
+    def export(self, data: Data) -> Optional[List[str]]:
+        source_url = data.source_url
+        primary_destination = data.destination_path[0] if isinstance(
+            data.destination_path, list) else data.destination_path
+        path = self.create_absolute_path(Path(primary_destination))
+

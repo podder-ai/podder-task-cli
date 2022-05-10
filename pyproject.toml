@@ -17,6 +17,7 @@ requests = "^2.26.0"
 tqdm = "^4.62.3"
 packaging = "^20.9.0"
 PyYAML = "^6.0"
+boto3 = "^1.21.22"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

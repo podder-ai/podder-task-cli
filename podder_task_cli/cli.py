@@ -64,6 +64,19 @@ def _import(process_name: str, target_source: str):
 
 
 @main.group()
+def export():
+    pass
+
+
+@export.command()
+@click.option('-o', '--output', 'output')
+@click.option('-t', '--type', 'type_')
+def docker(output: str, type_: str):
+    pass
+
+
+'''
+@main.group()
 def library():
     pass
 
@@ -76,6 +89,7 @@ def init():
 @library.command()
 def check():
     pass
+'''
 
 
 @main.group()
