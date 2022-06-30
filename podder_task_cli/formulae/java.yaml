@@ -1,0 +1,12 @@
+macos:
+    command:
+        - "brew install java"
+redhat:
+    command:
+        - "yum -y install java"
+debian:
+    command:
+        - "apt install default-jre"
+windows:
+    command:
+        - "choco install javaruntime"

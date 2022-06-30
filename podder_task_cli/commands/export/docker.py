@@ -13,7 +13,10 @@ class Docker(object):
         CLI = "cli"
         HTTP = "http"
 
-    def __init__(self, path: Path, output_path: Optional[Path] = None, docker_type: str = DockerType.CLI):
+    def __init__(self,
+                 path: Path,
+                 output_path: Optional[Path] = None,
+                 docker_type: str = DockerType.CLI):
         self._path = path
         self._output_path = output_path or self._path.joinpath("Dockerfile")
         self._docker_type = docker_type

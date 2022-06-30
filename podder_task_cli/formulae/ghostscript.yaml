@@ -8,5 +8,5 @@ debian:
   command:
     - "apt install ghostscript"
 windows:
-  message:
-    - "Refer https://blog.alivate.com.au/poppler-windows/ to install"
+  command:
+    - "choco install ghostscript"

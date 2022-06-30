@@ -55,9 +55,13 @@ class Import(object):
         source = get_source(path=destination_path, url=self._target_source)
 
         if isinstance(source, Project):
-            importer = ImportProject(source, base_path=self._base_path)
+            importer = ImportProject(source,
+                                     base_path=self._base_path,
+                                     processes=self._processes)
         elif isinstance(source, Library):
-            importer = ImportLibrary(source, base_path=self._base_path)
+            importer = ImportLibrary(source,
+                                     base_path=self._base_path,
+                                     processes=self._processes)
         else:
             click.secho("Seems this source is not supported: {}".format(
                 self._target_source),

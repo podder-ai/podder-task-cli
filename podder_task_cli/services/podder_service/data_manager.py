@@ -1,6 +1,6 @@
 import shutil
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional
 
 from tqdm import tqdm
 
@@ -70,4 +70,3 @@ class DataManager(object):
         primary_destination = data.destination_path[0] if isinstance(
             data.destination_path, list) else data.destination_path
         path = self.create_absolute_path(Path(primary_destination))
-

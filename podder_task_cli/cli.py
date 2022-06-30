@@ -2,8 +2,7 @@ from pathlib import Path
 
 import click
 
-from podder_task_cli.commands import (Analyze, Eject, Import, Inspect, Install,
-                                      New, Process)
+from podder_task_cli.commands import Analyze, Eject, Import, Inspect, Install, New, Process
 from podder_task_cli.commands.plugin import Install as PluginInstall
 from podder_task_cli.commands.plugin import List as PluginList
 from podder_task_cli.services import PodderService

@@ -1,2 +1,6 @@
+from pathlib import Path
+
+
 class LibraryService(object):
-    pass
+    def __init__(self, path: Path):
+        self._path = path

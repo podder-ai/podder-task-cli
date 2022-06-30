@@ -9,4 +9,4 @@ debian:
     - "apt install poppler-utils poppler-data"
 windows:
   message:
-    - "Refer https://blog.alivate.com.au/poppler-windows/ to install"
+    - "choco install poppler"

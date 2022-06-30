@@ -1,14 +1,16 @@
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 from ...services.podder_service.entities import Entity
 from .sources import Source
 
 
 class ImportBase(object):
-    def __init__(self, source: Source, base_path: Path):
+    def __init__(self, source: Source, base_path: Path,
+                 processes: Optional[List[str]]):
         self._source = source
         self._base_path = base_path
+        self._processes = []
 
     def execute(self) -> [str]:
         raise NotImplementedError

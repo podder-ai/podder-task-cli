@@ -1,5 +1,6 @@
 import shutil
 from pathlib import Path
+from typing import List, Optional
 
 import click
 from PyInquirer import prompt
@@ -10,10 +11,10 @@ from .sources import Project
 
 
 class ImportProject(ImportBase):
-    def __init__(self, source: Project, base_path: Path):
-        super().__init__(source, base_path)
+    def __init__(self, source: Project, base_path: Path,
+                 processes: Optional[List[str]]):
+        super().__init__(source, base_path, processes)
         self._source = source
-        self._processes = []
         self._package_service = PackageService(base_path)
 
     def execute(self) -> [str]:

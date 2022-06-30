@@ -2,7 +2,7 @@ import json
 import shutil
 from collections import OrderedDict
 from pathlib import Path
-from typing import Tuple
+from typing import List, Optional, Tuple
 
 import click
 
@@ -18,8 +18,9 @@ class ImportLibrary(ImportBase):
         "process.py": "process_for_library.py.tmpl"
     }
 
-    def __init__(self, source: Library, base_path: Path):
-        super().__init__(source, base_path)
+    def __init__(self, source: Library, base_path: Path,
+                 processes: Optional[List[str]]):
+        super().__init__(source, base_path, processes)
         self._source = source
         self._template_directory = Path(__file__).parent.joinpath(
             "..", "..", "templates")
