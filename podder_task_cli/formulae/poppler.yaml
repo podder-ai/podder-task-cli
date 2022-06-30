@@ -1,0 +1,12 @@
+macos:
+  command:
+    - "brew install poppler"
+redhat:
+  command:
+    - "yum -y install poppler"
+debian:
+  command:
+    - "apt install poppler-utils poppler-data"
+windows:
+  message:
+    - "choco install poppler"

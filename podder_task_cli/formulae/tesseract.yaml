@@ -1,0 +1,12 @@
+macos:
+  command:
+    - "brew install tesseract"
+redhat:
+  command:
+    - "yum -y install tesseract"
+debian:
+  command:
+    - "apt install tesseract-ocr"
+windows:
+  message:
+    - "Refer https://github.com/UB-Mannheim/tesseract/wiki to install"

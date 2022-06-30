@@ -1,0 +1,12 @@
+macos:
+  command:
+    - "brew install ghostscript"
+redhat:
+  command:
+    - "yum -y install ghostscript"
+debian:
+  command:
+    - "apt install ghostscript"
+windows:
+  command:
+    - "choco install ghostscript"

@@ -4,8 +4,8 @@ from typing import Optional
 import click
 from rich.prompt import Confirm, Console
 
-from ...entities import PluginInfo
 from ...services import PackageService, PodderService
+from ...services.podder_service.entities import PluginInfo
 from .plugin import Plugin
 
 
@@ -13,7 +13,7 @@ class Install(Plugin):
     def __init__(self, path: Path):
         super().__init__(path)
         self._package_service = PackageService(self._path)
-        self._podder_service = PodderService()
+        self._podder_service = PodderService(project_path=self._path)
 
     def process(self, plugin_name: str, version: Optional[str] = None):
         if plugin_name.endswith(".git"):
@@ -27,11 +27,11 @@ class Install(Plugin):
                     fg="red")
                 return
 
-            print(plugin_info.repository)
+            print(plugin_info.source)
             current_version = self._find_plugin_from_installed_plugins(
                 plugin_name)
             if current_version is None:
-                success = self._install_plugin_by_git(plugin_info.repository,
+                success = self._install_plugin_by_git(plugin_info.source,
                                                       plugin_info.branch)
             else:
                 console = Console()
@@ -40,7 +40,7 @@ class Install(Plugin):
                     format(plugin_name, current_version))
                 if not Confirm.ask('Do you want to update to new version?'):
                     return
-                success = self._update_plugin_by_git(plugin_info.repository,
+                success = self._update_plugin_by_git(plugin_info.source,
                                                      plugin_info.branch)
 
         if not success:

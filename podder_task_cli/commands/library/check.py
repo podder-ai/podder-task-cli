@@ -1,13 +1,13 @@
 import click
 
-from ...entities import Interface
+from ...services.podder_service.entities import Interface
 from .library import Library
 
 
 class Check(Library):
     def execute(self):
-        is_podder_based_repository = self._check_podder_based_repository()
-        if is_podder_based_repository:
+        is_podder_based_source = self._check_podder_based_source()
+        if is_podder_based_source:
             click.secho(
                 "This podder based project. No need to set up as a library",
                 fg="yellow")
@@ -34,7 +34,7 @@ class Check(Library):
         click.secho("Entry Point: {}.{}".format(interface.object,
                                                 interface.method))
 
-    def _check_podder_based_repository(self) -> bool:
+    def _check_podder_based_source(self) -> bool:
         processes_exists = self.get_path("processes").exists()
         config_exists = self.get_path("config").exists()
         manage_exists = self.get_path("manage.py").exists()

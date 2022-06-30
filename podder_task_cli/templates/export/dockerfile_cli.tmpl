@@ -1,0 +1,34 @@
+FROM python:{{ python_version }}-slim-buster
+
+# locale setting
+RUN locale-gen en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    DEBIAN_FRONTEND=noninteractive \
+    PYTHONIOENCODING=utf-8
+RUN localedef -f UTF-8 -i en_US en_US.utf8
+
+
+RUN apt-get update -y \
+&& apt-get install -y curl wget git vim iputils-ping dnsutils \
+&& apt-get install -y git net-tools dnsutils gcc g++ \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/* \
+&& cd /usr/local/bin \
+&& pip3 install --upgrade pip \
+&& pip install --upgrade cython setuptools poetry
+
+{% if require_aws_access %}
+RUN pip install --upgrade awscli
+{% endif %}
+
+COPY pyproject.toml pyproject.toml
+RUN poetry export --without-hashes --dev --output poetry-requirements.txt \
+&& pip install -U -r poetry-requirements.txt
+{% endif %}
+
+{% if custom_installation_script %}
+COPY {{ custom_installation_script }} custom_installation.sh
+RUN sh custom_installation.sh
+{% endif %}

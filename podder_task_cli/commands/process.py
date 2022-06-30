@@ -156,9 +156,9 @@ class Process(object):
 
         if len(required_plugins) > 0:
             click.secho("Installing object plugins...", fg="green")
-            for plugin_repository in required_plugins:
-                click.secho("  ..{}".format(plugin_repository))
-                self._package_service.install_package(plugin_repository)
+            for plugin_source in required_plugins:
+                click.secho("  ..{}".format(plugin_source))
+                self._package_service.install_package(plugin_source)
 
     @staticmethod
     def _convert_kebab_to_snake(name: str) -> str:

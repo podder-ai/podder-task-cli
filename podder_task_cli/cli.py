@@ -2,23 +2,33 @@ from pathlib import Path
 
 import click
 
-from podder_task_cli.commands import (Analyze, Eject, Import, Inspect, New,
-                                      Process)
-from podder_task_cli.commands.plugin import Install, List
+from podder_task_cli.commands import Analyze, Eject, Import, Inspect, Install, New, Process
+from podder_task_cli.commands.plugin import Install as PluginInstall
+from podder_task_cli.commands.plugin import List as PluginList
+from podder_task_cli.services import PodderService
 
 from . import __version__
 
 
 @click.group()
-@click.version_option(__version__, prog_name="Podder Task CLI")
+@click.version_option(__version__,
+                      "-v",
+                      "--version",
+                      "-version",
+                      prog_name="Podder Task CLI")
 def main():
-    pass
+    PodderService(project_path=Path("./")).check_cli_version()
 
 
 @main.command()
 @click.argument('name')
 def new(name: str):
     New(name=name, path=Path("./")).process()
+
+
+@main.command()
+def install():
+    Install(path=Path("./")).process()
 
 
 @main.command()
@@ -45,13 +55,26 @@ def analyze(json_output):
 
 @main.command(name='import')
 @click.option('-p', '--process', 'process_name', multiple=True)
-@click.argument('target_repository')
-def _import(process_name: str, target_repository: str):
-    Import(target_repository=target_repository,
+@click.argument('target_source')
+def _import(process_name: str, target_source: str):
+    Import(target_source=target_source,
            processes=process_name,
            base_path=Path("./")).process()
 
 
+@main.group()
+def export():
+    pass
+
+
+@export.command()
+@click.option('-o', '--output', 'output')
+@click.option('-t', '--type', 'type_')
+def docker(output: str, type_: str):
+    pass
+
+
+'''
 @main.group()
 def library():
     pass
@@ -65,6 +88,7 @@ def init():
 @library.command()
 def check():
     pass
+'''
 
 
 @main.group()
@@ -74,10 +98,10 @@ def plugin():
 
 @plugin.command(name='list')
 def _list():
-    List(path=Path("./")).process()
+    PluginList(path=Path("./")).process()
 
 
 @plugin.command()
 @click.argument('plugin_name')
 def install(plugin_name: str):
-    Install(path=Path("./")).process(plugin_name)
+    PluginInstall(path=Path("./")).process(plugin_name)

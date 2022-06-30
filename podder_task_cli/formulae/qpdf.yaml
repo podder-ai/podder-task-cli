@@ -1,0 +1,12 @@
+macos:
+  command:
+    - "brew install qpdf"
+redhat:
+  command:
+    - "yum -y install qpdf"
+debian:
+  command:
+    - "apt install qpdf"
+windows:
+  message:
+    - "choco install qpdf"
