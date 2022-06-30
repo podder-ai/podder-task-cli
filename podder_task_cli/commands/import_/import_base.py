@@ -10,7 +10,7 @@ class ImportBase(object):
                  processes: Optional[List[str]]):
         self._source = source
         self._base_path = base_path
-        self._processes = []
+        self._processes = processes
 
     def execute(self) -> [str]:
         raise NotImplementedError

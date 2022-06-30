@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Tuple
 
 import click
 
@@ -56,7 +57,7 @@ def analyze(json_output):
 @main.command(name='import')
 @click.option('-p', '--process', 'process_name', multiple=True)
 @click.argument('target_source')
-def _import(process_name: str, target_source: str):
+def _import(process_name: Tuple[str], target_source: str):
     Import(target_source=target_source,
            processes=process_name,
            base_path=Path("./")).process()

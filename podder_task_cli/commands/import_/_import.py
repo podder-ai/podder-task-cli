@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from typing import Tuple
 
 import click
 
@@ -16,11 +17,11 @@ class Import(object):
     _copy_files = ["__init__.py", "process.py"]
     _directories = ["config", "processes", "data", "input", "output"]
 
-    def __init__(self, target_source: str, processes: [str], base_path: Path):
+    def __init__(self, target_source: str, processes: Tuple[str],
+                 base_path: Path):
         self._target_source = target_source
         self._processes = list(processes)
         self._base_path = base_path
-
         self._template_directory = Path(__file__).parent.joinpath(
             "..", "templates")
         self._package_service = PackageService(self._base_path)
@@ -44,8 +45,8 @@ class Import(object):
         else:
             destination_path = Path(
                 str(temporary_directory_object.name) + os.sep + "source")
-            success = GitUtility().clone_source(self._target_source,
-                                                destination_path)
+            success = GitUtility().clone_repository(self._target_source,
+                                                    destination_path)
             if not success:
                 click.secho("Clone source failed: {}".format(
                     self._target_source),
