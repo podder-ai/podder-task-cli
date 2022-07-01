@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import List, Optional
 
-from ...services.podder_service.entities import Entity
+from ...services.podder_service.entities import Import
 from .sources import Source
 
 
@@ -15,10 +15,10 @@ class ImportBase(object):
     def execute(self) -> [str]:
         raise NotImplementedError
 
-    def _get_metadata(self, name: str) -> Optional[Entity]:
+    def _get_metadata(self, name: str) -> Optional[Import]:
         path = self._base_path.joinpath("processes", name,
                                         ".podder.process.conf")
         if not path.exists():
             return None
-        entity = Entity.load(path)
+        entity = Import.load(path)
         return entity

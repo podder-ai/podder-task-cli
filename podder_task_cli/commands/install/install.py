@@ -12,6 +12,12 @@ class Install(object):
         self._podder_service = PodderService(project_path=path)
 
     def process(self):
+        # check podder.yaml file
+        if not self._podder_service.has_project_config_file():
+            click.secho("podder.yaml file not found: {}".format(
+                self._podder_service.get_project_config_path()),
+                        fg="yellow")
+
         # library install
         click.secho("Install external libraries...")
         self._podder_service.install_libraries()

@@ -6,7 +6,7 @@ from typing import Tuple
 import click
 
 from ...services import PackageService
-from ...services.podder_service.entities import Entity
+from ...services.podder_service.entities import Import as ImportEntity
 from ...utilities import GitUtility
 from .import_library import ImportLibrary
 from .import_project import ImportProject
@@ -78,9 +78,11 @@ class Import(object):
         target_source = self._target_source
         if self._is_source_local():
             target_source = "local"
-        entity = Entity({
-            "base_source": target_source,
-            "revision": revision,
+        entity = ImportEntity({
+            "name": name,
+            "source_repository": target_source,
+            "version": revision,
+            "source_process": name,
         })
         path = self._base_path.joinpath("processes", name,
                                         ".podder.process.conf")

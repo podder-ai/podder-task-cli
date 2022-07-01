@@ -28,3 +28,6 @@ class ProjectConfigManager(object):
 
     def project_config_file(self) -> Optional[Package]:
         return self._project_config
+
+    def has_project_config_file(self) -> bool:
+        return self.get_project_config_path().exists()

@@ -31,7 +31,7 @@ class ImportProject(ImportBase):
                     return False
 
         for process in self._processes:
-            can_continue = self._check_exisiting_process(
+            can_continue = self._check_existing_process(
                 process, self._source.path)
             if not can_continue:
                 continue
@@ -80,8 +80,8 @@ class ImportProject(ImportBase):
     def _get_config_directory(self, process_name: str) -> Path:
         return self._base_path.joinpath("config", process_name)
 
-    def _check_exisiting_process(self, process_name: str,
-                                 source_directory: Path) -> bool:
+    def _check_existing_process(self, process_name: str,
+                                source_directory: Path) -> bool:
         process_directory = self._get_process_directory(process_name)
         if process_directory.exists():
 
@@ -89,7 +89,7 @@ class ImportProject(ImportBase):
             message = 'Process [{}] already exists. Do yo want to overwrite?'.format(
                 process_name)
             if entity:
-                if entity.base_source != self._source.url:
+                if entity.source_repository != self._source.url:
                     message = 'Process [{}] already exists but came from different source. Do yo want to overwrite?'.format(
                         process_name)
 

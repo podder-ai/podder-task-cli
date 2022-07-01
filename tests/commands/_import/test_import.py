@@ -7,5 +7,5 @@ def test_instance_create():
     instance = Import(
         target_source="git@github.com:podder-ai/podder-task-base.git",
         base_path=Path(__file__).parent.joinpath("_data"),
-        processes=[])
+        processes=())
     assert instance is not None

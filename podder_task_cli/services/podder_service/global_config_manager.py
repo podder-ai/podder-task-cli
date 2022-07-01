@@ -101,6 +101,10 @@ class GlobalConfigManager(object):
 
     def store_cli_version(self, latest_version: str, last_update_time: int):
         version_path = self.get_cli_version_info_path()
+
+        if not version_path.parent.exists():
+            version_path.parent.mkdir(parents=True)
+
         with version_path.open(encoding="utf-8", mode="w") as file:
             yaml.dump(
                 {

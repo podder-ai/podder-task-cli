@@ -11,8 +11,6 @@ from .project_config_manager import ProjectConfigManager
 
 
 class PodderService(object):
-    project_config_file_name = "podder.yaml"
-
     def __init__(self, project_path: Optional[Path] = None):
         self._project_path = project_path
         self._project_config_manager = ProjectConfigManager(
@@ -21,6 +19,12 @@ class PodderService(object):
             project_path=self._project_path)
         self._data_manager = DataManager(project_path=self._project_path)
         self._library_manager = LibraryManager(project_path=self._project_path)
+
+    def has_project_config_file(self) -> bool:
+        return self._project_config_manager.has_project_config_file()
+
+    def get_project_config_path(self) -> Path:
+        return self._project_config_manager.get_project_config_path()
 
     def check_cli_version(self):
         latest_version = self._global_config_manager.check_cli_version()
