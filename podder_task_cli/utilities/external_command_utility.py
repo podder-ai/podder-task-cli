@@ -2,9 +2,8 @@ import itertools
 import subprocess
 import time
 from pathlib import Path
+from shutil import which
 from typing import List, Optional, Tuple, Union
-
-import click
 
 from .terminal_utility import TerminalUtility
 
@@ -24,10 +23,16 @@ class ExternalCommandUtility(object):
         for c in itertools.cycle(['|', '/', '-', '\\']):
             if process.poll():
                 break
-            terminal_utility.print(
-                "\r Executing external commands ... {}".format(c),
-                new_line=False)
-            time.sleep(0.1)
-        terminal_utility.print("\r")
+            if show_loading_animation:
+                terminal_utility.print(
+                    "\r Executing external commands ... {}".format(c),
+                    new_line=False)
+                time.sleep(0.1)
+        if show_loading_animation:
+            terminal_utility.print("\r")
 
         return process.stdout, process.stderr
+
+    @staticmethod
+    def check_command(name: str) -> bool:
+        return which(name) is not None

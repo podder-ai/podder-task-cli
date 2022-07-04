@@ -17,9 +17,7 @@ class PoetryUtility(ExternalCommandUtility):
         return self.execute_command(poetry_commands, working_directory=path)
 
     def install(self, path: Path) -> bool:
-        result, error = self.execute_command("install",
-                                             working_directory=path,
-                                             show_loading_animation=True)
+        result, error = self.execute_poetry_command("install", path=path)
         return error is None
 
     def add(self, package_name: str, path: Path) -> bool:

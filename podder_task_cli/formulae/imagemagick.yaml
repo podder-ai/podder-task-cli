@@ -1,0 +1,16 @@
+macos:
+    command:
+        - "brew install imagemagick"
+    check: "convert"
+redhat:
+    command:
+        - "yum -y install ImageMagick ImageMagick-devel"
+    check: "convert"
+debian:
+    command:
+        - "apt install imagemagick"
+    check: "convert"
+windows:
+    command:
+        - "choco install imagemagick"
+    check: "convert"

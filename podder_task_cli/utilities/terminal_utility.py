@@ -20,3 +20,12 @@ class TerminalUtility(object):
               style: Optional[str] = Style.Normal):
         end = "\n" if new_line else ""
         self._console.print(message, style=style, end=end)
+
+    def info(self, message: str, new_line=True):
+        self.print(message, new_line, self.Style.Info)
+
+    def warning(self, message: str, new_line=True):
+        self.print(message, new_line, self.Style.Warning)
+
+    def error(self, message: str, new_line=True):
+        self.print(message, new_line, self.Style.Error)

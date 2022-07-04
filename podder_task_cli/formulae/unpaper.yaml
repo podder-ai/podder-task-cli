@@ -1,12 +1,16 @@
 macos:
   command:
     - "brew install unpaper"
+  check: "unpaper"
 redhat:
   command:
     - "yum -y install unpaper"
+  check: "unpaper"
 debian:
   command:
     - "apt install unpaper"
+  check: "unpaper"
 windows:
   message:
     - "Refer https://github.com/UB-Mannheim/tesseract/wiki to install"
+  check: "unpaper"

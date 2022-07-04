@@ -1,12 +1,16 @@
 macos:
   command:
     - "brew install qpdf"
+  check: "qpdf"
 redhat:
   command:
     - "yum -y install qpdf"
+  check: "qpdf"
 debian:
   command:
     - "apt install qpdf"
+  check: "qpdf"
 windows:
   message:
     - "choco install qpdf"
+  check: "qpdf"

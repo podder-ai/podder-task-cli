@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List, Optional
 
 import click
-from PyInquirer import prompt
+from InquirerPy import prompt
 
 from ...services import PackageService
 from .import_base import ImportBase

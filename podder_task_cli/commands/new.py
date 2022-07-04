@@ -8,7 +8,7 @@ import zipfile
 from pathlib import Path
 
 import click
-from PyInquirer import prompt
+from InquirerPy import prompt
 
 from ..services import PackageService
 from ..utilities import FileUtility, GitUtility

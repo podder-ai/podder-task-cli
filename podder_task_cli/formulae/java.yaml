@@ -1,12 +1,16 @@
 macos:
     command:
         - "brew install java"
+    check: "java"
 redhat:
     command:
         - "yum -y install java"
+    check: "java"
 debian:
     command:
         - "apt install default-jre"
+    check: "java"
 windows:
     command:
         - "choco install javaruntime"
+    check: "java"

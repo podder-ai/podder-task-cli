@@ -1,12 +1,16 @@
 macos:
   command:
     - "brew install poppler"
+  check: "pdfinfo"
 redhat:
   command:
     - "yum -y install poppler"
+  check: "pdfinfo"
 debian:
   command:
     - "apt install poppler-utils poppler-data"
+  check: "pdfinfo"
 windows:
   message:
     - "choco install poppler"
+  check: "pdfinfo"

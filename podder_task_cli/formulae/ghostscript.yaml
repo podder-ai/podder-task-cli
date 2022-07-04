@@ -1,12 +1,16 @@
 macos:
   command:
     - "brew install ghostscript"
+  check: "gs"
 redhat:
   command:
     - "yum -y install ghostscript"
+  check: "gs"
 debian:
   command:
     - "apt install ghostscript"
+  check: "gs"
 windows:
   command:
     - "choco install ghostscript"
+  check: "rungs"
