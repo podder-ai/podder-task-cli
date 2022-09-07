@@ -1,7 +1,5 @@
 from pathlib import Path
 
-import click
-
 from ...services import PackageService, PodderService
 from ...utilities import TerminalUtility
 from .plugin import Plugin
@@ -9,8 +7,9 @@ from .plugin import Plugin
 
 class List(Plugin):
     def process(self):
-        podder_service = PodderService()
-        package_service = PackageService(Path(self._path))
+        current_path = Path(self._path)
+        podder_service = PodderService(current_path)
+        package_service = PackageService(current_path)
         terminal_utility = TerminalUtility()
 
         registered_plugins = podder_service.get_registered_plugin_info()

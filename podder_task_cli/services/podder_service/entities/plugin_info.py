@@ -4,7 +4,7 @@ from .entity import Entity
 class PluginInfo(Entity):
     _properties = {
         "name": str,
-        "source": str,
+        "repository": str,
         "description": str,
         "branch": str
     }

@@ -27,11 +27,10 @@ class Install(Plugin):
                     fg="red")
                 return
 
-            print(plugin_info.source)
             current_version = self._find_plugin_from_installed_plugins(
                 plugin_name)
             if current_version is None:
-                success = self._install_plugin_by_git(plugin_info.source,
+                success = self._install_plugin_by_git(plugin_info.repository,
                                                       plugin_info.branch)
             else:
                 console = Console()
@@ -40,7 +39,7 @@ class Install(Plugin):
                     format(plugin_name, current_version))
                 if not Confirm.ask('Do you want to update to new version?'):
                     return
-                success = self._update_plugin_by_git(plugin_info.source,
+                success = self._update_plugin_by_git(plugin_info.repository,
                                                      plugin_info.branch)
 
         if not success:

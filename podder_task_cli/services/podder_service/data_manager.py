@@ -4,6 +4,7 @@ from typing import List, Optional
 from urllib.parse import urlparse
 
 import boto3
+import botocore.exceptions
 from tqdm import tqdm
 
 from ...utilities import HttpUtility, TerminalUtility
@@ -13,6 +14,7 @@ from .entities import Data, Package
 class DataManager(object):
     def __init__(self, project_path: Path):
         self._project_path = project_path
+        self._terminal_utility = TerminalUtility()
 
     def create_absolute_path(self, data_path: Path) -> Path:
         return self._project_path.joinpath("data").joinpath(
@@ -69,7 +71,7 @@ class DataManager(object):
                           desc=path) as t:
                     s3.meta.client.download_file(path, Callback=hook(t))
         except Exception as e:
-            TerminalUtility().error(str(e))
+            self._terminal_utility.error(str(e))
             return None
 
         return path
@@ -106,9 +108,16 @@ class DataManager(object):
                         self.copy(downloaded[datum.source_url],
                                   destination_path)
                 else:
-                    file_size = self.get_file_size(datum.source_url)
-                    if file_size is None:
+                    try:
+                        file_size = self.get_file_size(datum.source_url)
+                        if file_size is None:
+                            continue
+                    except botocore.exceptions.NoCredentialsError:
+                        self._terminal_utility.error(
+                            "You need to set AWS ID/Secret to environment variables"
+                        )
                         continue
+
                     progress_bar = tqdm(total=file_size,
                                         unit="B",
                                         unit_scale=True)
