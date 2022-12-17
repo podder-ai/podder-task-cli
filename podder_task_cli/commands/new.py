@@ -144,6 +144,6 @@ class New(object):
             click.secho("Installing HTTP plugin...", fg="green")
             os.chdir('./{}'.format(self._name))
             self._package_service.install_package(
-                "git+ssh://git@github.com:podder-ai/podder-task-foundation-commands-http.git"
+                "https://github.com/podder-ai/podder-task-foundation-commands-http.git"
             )
             os.chdir('../')
